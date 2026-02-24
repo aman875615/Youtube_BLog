@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %>
+    <title>Blog</title>
+    <style>
+        .circle-image{
+            border-radius: 50%;
+        }
+        .comment-text{
+            margin-left: 48px; 
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./partials/nav') %>
+
+   <div class="container mt-4">
+        <h5 class="card-title"><%= blog.title %></h5>
+        <img src="<%= blog.coverImageURL %>"  width="700px" />    
+        <pre class="mt-3"><%= blog.body %></pre>
+    </div>
+
+    <div class="container mt-4">
+        <img src="<%= blog.createdBy.profileImage %>" width="50px" class="circle-image"/>
+        <%= blog.createdBy.fullName %>
+    </div>
+
+   
+
+    <div class="container mt-4">
+        <h1>comments (<%= comments.length %>)</h1>
+        <% if (locals.user) { %>
+         <form action="/blog/comment/<%= blog._id %>" method="post">
+        <div class="mb-3">
+           <input type="text" name="content" class="form-control" placeholder="Enter your comment"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+       </form>
+        <% } %>
+    </div>
+
+
+<% comments.forEach(comment => { %>
+  <div class="card mb-3">
+    <div class="d-flex align-items-center gap-2 mb-2">
+
+      <img
+        src="<%= comment.createdBy ? comment.createdBy.profileImage : '/Images/default.png' %>"
+        width="40px" class="circle-image"
+      />
+
+      <strong>
+        <%= comment.createdBy ? comment.createdBy.fullName : "Unknown User" %>
+      </strong>
+
+      <pre class="comment-text mb-0" ><%= comment.content %></pre>
+
+    </div>
+  </div>
+<% }) %>
+
+
+    <%- include('./partials/scripts') %>
+</body>
+</html>

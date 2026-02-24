@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %>
+    <style>
+    
+
+        /* LIGHT MODE */
+body.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* DARK MODE */
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+/* Navbar dark */
+body.dark .navbar {
+  background-color: #1f1f1f !important;
+}
+
+body.dark .nav-link {
+  color: #ffffff !important;
+}
+#themeToggle:hover,
+    #themeToggle:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+    </style>
+</head>
+<body class="light dark">
+    <%- include('./partials/nav') %>
+   <div class="container mt-3">
+    <div class="row row-cols-4 g-4">
+        <% blogs.forEach((blog) => { %>
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title"><%= blog.title %></h5>
+                <a href="/blog/<%= blog._id %>" class="btn btn-primary">View</a>
+            </div>
+        </div>
+     </div>
+     <% }) %>
+
+
+    </div>
+     
+    </div>
+    <script>
+       const toggleBtn = document.getElementById("themeToggle");
+const body = document.body;
+
+// load saved theme
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  body.className = savedTheme;
+  toggleBtn.textContent = savedTheme === "dark" ? "🌞" : "🌙";
+}
+
+toggleBtn.addEventListener("click", () => {
+  if (body.classList.contains("light")) {
+    body.className = "dark";
+    toggleBtn.textContent = "🌞";
+    localStorage.setItem("theme", "dark");
+  } else {
+    body.className = "light";
+    toggleBtn.textContent = "🌙";
+    localStorage.setItem("theme", "light");
+  }
+});
+ 
+    </script>
+    <%- include('./partials/scripts') %>
+</body>
+</html>
