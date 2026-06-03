@@ -7,17 +7,23 @@ const cloudinary = require('cloudinary').v2;
 const Blog =  require("../models/blog");
 const Comment = require("../models/comment");
 
-if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-  console.warn("WARNING: Cloudinary configuration variables are missing in process.env!");
+const cloud_name = (process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUD_NAME || "").trim();
+const api_key = (process.env.CLOUDINARY_API_KEY || process.env.CLOUD_API_KEY || process.env.API_KEY || "").trim();
+const api_secret = (process.env.CLOUDINARY_API_SECRET || process.env.CLOUD_API_SECRET || process.env.API_SECRET || "").trim();
 
+if (!cloud_name || !api_key || !api_secret) {
+  console.warn("WARNING: Cloudinary configuration variables are missing in process.env!");
+  console.warn("cloud_name:", cloud_name ? "Found" : "Missing");
+  console.warn("api_key:", api_key ? "Found" : "Missing");
+  console.warn("api_secret:", api_secret ? "Found" : "Missing");
 } else {
-  console.log("Cloudinary configuration loaded successfully.");
+  console.log("Cloudinary configuration loaded successfully for cloud:", cloud_name);
 }
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name,
+  api_key,
+  api_secret,
   secure: true
 });
 
