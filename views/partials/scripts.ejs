@@ -1,5 +1,35 @@
- <script
-     
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
-    
-</script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+ <script>
+   document.addEventListener("DOMContentLoaded", () => {
+     const toggleBtn = document.getElementById("themeToggle");
+     const body = document.body;
+
+     // Apply default body class if not present
+     if (!body.classList.contains("light") && !body.classList.contains("dark")) {
+       body.classList.add("light");
+     }
+
+     // load saved theme
+     const savedTheme = localStorage.getItem("theme");
+     if (savedTheme) {
+       body.className = savedTheme;
+       if (toggleBtn) {
+         toggleBtn.textContent = savedTheme === "dark" ? "🌞" : "🌙";
+       }
+     }
+
+     if (toggleBtn) {
+       toggleBtn.addEventListener("click", () => {
+         if (body.classList.contains("light")) {
+           body.className = "dark";
+           toggleBtn.textContent = "🌞";
+           localStorage.setItem("theme", "dark");
+         } else {
+           body.className = "light";
+           toggleBtn.textContent = "🌙";
+           localStorage.setItem("theme", "light");
+         }
+       });
+     }
+   });
+ </script>

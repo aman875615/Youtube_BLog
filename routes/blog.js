@@ -9,9 +9,7 @@ const Comment = require("../models/comment");
 
 if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
   console.warn("WARNING: Cloudinary configuration variables are missing in process.env!");
-  console.warn("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME ? "Found" : "Missing");
-  console.warn("CLOUDINARY_API_KEY:", process.env.CLOUDINARY_API_KEY ? "Found" : "Missing");
-  console.warn("CLOUDINARY_API_SECRET:", process.env.CLOUDINARY_API_SECRET ? "Found" : "Missing");
+
 } else {
   console.log("Cloudinary configuration loaded successfully.");
 }
