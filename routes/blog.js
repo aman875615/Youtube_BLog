@@ -2,8 +2,17 @@ const { Router} = require('express');
 
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
 const Blog =  require("../models/blog");
 const Comment = require("../models/comment");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+});
 
 const router = Router();
 
@@ -46,13 +55,38 @@ router.post('/comment/:blogId', async (req, res) => {
 
 router.post("/", upload.single('coverImage'), async(req,res)=>{
     const {title, body} = req.body; 
-   const blog= await Blog.create({
-      body,
-      title,
-      createdBy: req.user.id,
-      coverImageURL: req.file ? `/uploads/${req.file.filename}` : null,
-    }) ;
-    return res.redirect(`/blog/${blog._id}`);
+    let coverImageURL = null;
+
+    if (req.file) {
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: "blogify"
+            });
+            coverImageURL = result.secure_url;
+            
+            // Delete local file after upload
+            fs.unlink(req.file.path, (err) => {
+                if (err) console.error("Error deleting local temp file:", err);
+            });
+        } catch (error) {
+            console.error("Cloudinary upload failed:", error);
+            // Fallback to local file URL if Cloudinary fails
+            coverImageURL = `/uploads/${req.file.filename}`;
+        }
+    }
+
+    try {
+        const blog = await Blog.create({
+            body,
+            title,
+            createdBy: req.user.id,
+            coverImageURL: coverImageURL,
+        });
+        return res.redirect(`/blog/${blog._id}`);
+    } catch (error) {
+        console.error("Error creating blog:", error);
+        return res.status(500).send("Error creating blog");
+    }
 });
 
 module.exports = router;

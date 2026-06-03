@@ -1,16 +1,10 @@
-import dotenv from "dotenv";
+const dotenv = require('dotenv');
 dotenv.config();
 
 
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
-
-import { v2 as cloudinary } from "cloudinary";
-
-cloudinary.config({
-  secure: true
-});
 const cookieParser = require('cookie-parser');
 
 const Blog = require('./models/blog');
