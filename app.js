@@ -1,8 +1,11 @@
-const dotenv = require('dotenv');
-dotenv.config();
-
-
 const path = require('path');
+const dotenv = require('dotenv');
+const envResult = dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+if (envResult.error) {
+    console.error("Error loading .env file:", envResult.error);
+}
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
